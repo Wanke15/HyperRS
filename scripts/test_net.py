@@ -17,7 +17,7 @@ batch_size = 256
 num_classes = 10   	 	
 epochs = 1000
 dropout_rate = 0.6
-data_dir = 'E:\\MyPapers\\PYTHON\\notebooks\\TF_Practice\\train_test_data\\'
+data_dir = './train_test_data/'
 log_path = 'C:\\logs\\hyper_34_logs'
 model_path = 'hyper_34_trained_model_callback.h5'
 
@@ -26,7 +26,7 @@ model_path = 'hyper_34_trained_model_callback.h5'
 # input image dimensions
 img_rows, img_cols = 5, 5
 num_predictions = 40
-save_dir = os.path.join(os.getcwd(), '34_saved_models')
+save_dir = '/model/'
 model_name = 'keras_hyper_34_trained_model_final.h5'
 
 X_34_train = np.load(data_dir +'X_34_train.npy')
