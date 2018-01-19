@@ -62,7 +62,8 @@ model.add(Activation('relu'))
 model.add(GlobalAveragePooling2D())
 
 # initiate RMSprop optimizer
-opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
+# opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
+opt = keras.optimizers.Adam(lr=0.00001, decay=1e-6)
 
 # Let's train the model using RMSprop
 model.compile(loss='categorical_crossentropy',
