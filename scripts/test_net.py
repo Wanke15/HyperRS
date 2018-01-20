@@ -3,8 +3,7 @@ import keras
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Flatten, BatchNormalization
 from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
-
+from keras import backend as K
 from keras.callbacks import TensorBoard, ModelCheckpoint, EarlyStopping, TerminateOnNaN, ReduceLROnPlateau
 
 from keras.layers import Dense, Dropout, Activation, Flatten
@@ -36,7 +35,7 @@ X = np.load(data_dir +'X_train.npy')
 
 y = np.load(data_dir +'y_train.npy')
 
-tr_X, te_X, tr_y, te_y = train_test_split(X, y, test_size=0.85, random_state=0)
+tr_X, te_X, tr_y, te_y = train_test_split(X, y, test_size=0.15, random_state=0)
 
 # Convert class vectors to binary class matrices.
 tr_y = keras.utils.to_categorical(tr_y, num_classes)
@@ -46,22 +45,14 @@ te_y = keras.utils.to_categorical(te_y, num_classes)
 tr_X /= 255
 te_X /= 255
 
-
-train_gen = ImageDataGenerator(
-        featurewise_center=True,
-        featurewise_std_normalization=True,
-        rotation_range=360,
-        fill_mode='nearest')
-
-val_gen = ImageDataGenerator(
-        featurewise_center=True,
-        featurewise_std_normalization=True,
-        rotation_range=360,
-        fill_mode='nearest')
-
 model = Sequential()
 model.add(Conv2D(128, (1, 1), padding='same',
                  input_shape=tr_X.shape[1:]))
+model.add(Activation('relu'))
+model.add(BatchNormalization())
+model.add(Dropout(dropout_rate))
+
+model.add(Conv2D(32, (1, 1)))
 model.add(Activation('relu'))
 model.add(BatchNormalization())
 model.add(Dropout(dropout_rate))
@@ -86,7 +77,7 @@ model.compile(loss='categorical_crossentropy',
 
 callbacks = [
                 TensorBoard(
-                  log_dir=log_path, histogram_freq=10),
+                  log_dir=log_path, histogram_freq=100),
 
                 EarlyStopping(
                   monitor='val_acc', 
@@ -99,10 +90,10 @@ callbacks = [
                 ReduceLROnPlateau(
                     monitor='val_loss', 
                     factor=0.2,
-                    patience=10,
+                    patience=25,
                     min_lr=0.000001),
                 
-                ModelCheckpoint(model_path,
+                ModelCheckpoint(model_callback,
                   monitor='val_acc',
                   save_best_only=True,
                   mode='max',
@@ -117,23 +108,13 @@ EarlyStopping(
                   patience=15,
                   verbose=1),
 '''
-'''
+
 model.fit(tr_X, tr_y,
               batch_size=batch_size,
               epochs=epochs,
               validation_data=(te_X, te_y),
               shuffle=True,
               callbacks=callbacks)
-'''
-# fits the model on batches with real-time data augmentation:
-model.fit_generator(train_gen.flow(tr_X, tr_y, batch_size=32),
-                    steps_per_epoch=len(tr_X) / 32, 
-                    validation_data=val_gen.flow(te_X, te_y, batch_size=32),
-                    epochs=epochs,
-                    validation_steps=len(te_X) / 32,
-                    shuffle=True,
-                    callbacks=callbacks)
-
 
 # Save model and weights
 if not os.path.isdir(save_dir):
