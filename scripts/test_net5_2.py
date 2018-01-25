@@ -21,8 +21,8 @@ num_classes = 10
 epochs = 100000
 dropout_rate = 0.6
 data_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\data\\ready\\"
-log_path = 'C:\\logs\\v5_2_3'
-save_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\models\\v5_2_3"
+log_path = 'C:\\logs\\v5_2_5'
+save_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\models\\v5_2_5"
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 model_callback = os.path.join(save_dir, "hyper_trained_model_callback.h5")
@@ -51,8 +51,8 @@ te_X /= 255
 model = Sequential()
 model.add(Conv2D(128, (1, 1), padding='valid',
                  input_shape=tr_X.shape[1:]))
-model.add(Activation('sigmoid'))
 model.add(BatchNormalization())
+model.add(Activation('sigmoid'))
 #model.add(Dropout(dropout_rate))
 '''
 model.add(Conv2D(32, (1, 1)))
@@ -61,8 +61,8 @@ model.add(BatchNormalization())
 model.add(Dropout(dropout_rate))
 '''
 model.add(Conv2D(64, (1, 1)))
-model.add(Activation('sigmoid'))
 model.add(BatchNormalization())
+model.add(Activation('sigmoid'))
 #model.add(Dropout(dropout_rate))
 
 model.add(Conv2D(10, (1, 1)))
@@ -91,7 +91,7 @@ callbacks = [
                 #TerminateOnNaN(),
 
                 ReduceLROnPlateau(
-                    monitor='val_loss', 
+                    monitor='val_acc', 
                     factor=0.7,
                     patience=5,
                     min_lr=1e10),
