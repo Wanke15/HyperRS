@@ -17,7 +17,7 @@ np.random.seed(0)
 from sklearn.model_selection import train_test_split
 
 
-batch_size = 512
+batch_size = 256
 num_classes = 10      
 epochs = 100000
 dropout_rate = 0.6
@@ -60,26 +60,26 @@ model = Sequential()
 model.add(Conv2D(128, (1, 1), padding='valid',
                  input_shape=tr_X.shape[1:]))
 model.add(BatchNormalization())
-model.add(Activation('relu'))
-#model.add(Dropout(dropout_rate))
+model.add(Activation('sigmoid'))
+model.add(Dropout(dropout_rate))
 
 model.add(Conv2D(32, (1, 1)))
 model.add(BatchNormalization())
-model.add(Activation('relu'))
-#model.add(Dropout(dropout_rate))
+model.add(Activation('sigmoid'))
+model.add(Dropout(dropout_rate))
 
 model.add(Conv2D(64, (1, 1)))
 model.add(BatchNormalization())
-model.add(Activation('relu'))
-#model.add(Dropout(dropout_rate))
+model.add(Activation('sigmoid'))
+model.add(Dropout(dropout_rate))
 
 model.add(Conv2D(10, (1, 1)))
 model.add(BatchNormalization())
-model.add(Activation('relu'))
+model.add(Activation('sigmoid'))
 model.add(GlobalAveragePooling2D())
 
 # initiate Adam optimizer
-opt = keras.optimizers.Adam(lr=0.0005, decay=1e-6)
+opt = keras.optimizers.Adam(lr=0.001, decay=1e-6)
 
 # Let's train the model using RMSprop
 model.compile(loss='categorical_crossentropy',
