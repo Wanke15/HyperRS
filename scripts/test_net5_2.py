@@ -49,17 +49,12 @@ tr_X /= 255
 te_X /= 255
 
 model = Sequential()
-model.add(Conv2D(128, (1, 1), padding='valid',
+model.add(Conv2D(256, (1, 1), padding='valid',
                  input_shape=tr_X.shape[1:]))
 model.add(BatchNormalization())
 model.add(Activation('sigmoid'))
 #model.add(Dropout(dropout_rate))
-'''
-model.add(Conv2D(32, (1, 1)))
-model.add(Activation('relu'))
-model.add(BatchNormalization())
-model.add(Dropout(dropout_rate))
-'''
+
 model.add(Conv2D(64, (1, 1)))
 model.add(BatchNormalization())
 model.add(Activation('sigmoid'))
@@ -92,8 +87,8 @@ callbacks = [
 
                 ReduceLROnPlateau(
                     monitor='val_acc', 
-                    factor=0.7,
-                    patience=5,
+                    factor=0.2,
+                    patience=3,
                     min_lr=1e10),
                 
                 ModelCheckpoint(model_callback,
