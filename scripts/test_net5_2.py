@@ -18,11 +18,11 @@ from sklearn.model_selection import train_test_split
 
 batch_size = 256
 num_classes = 10      
-epochs = 100000
+epochs = 1000000
 dropout_rate = 0.6
 data_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\data\\ready\\"
-log_path = 'C:\\logs\\v5_2_5'
-save_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\models\\v5_2_5"
+log_path = 'C:\\logs\\v5_2_6'
+save_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\models\\v5_2_6"
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 model_callback = os.path.join(save_dir, "hyper_trained_model_callback.h5")
@@ -78,9 +78,9 @@ callbacks = [
                   log_dir=log_path, histogram_freq=100),
 
                 EarlyStopping(
-                  monitor='val_acc', 
-                  mode='max',
-                  patience=100,
+                  monitor='loss', 
+                  mode='auto',
+                  patience=30,
                   verbose=1),
 
                 #TerminateOnNaN(),
@@ -94,7 +94,7 @@ callbacks = [
                 ModelCheckpoint(model_callback,
                   monitor='val_acc',
                   save_best_only=True,
-                  mode='max',
+                  mode='auto',
                   verbose=0)
             ]
 

@@ -22,8 +22,8 @@ num_classes = 10
 epochs = 100000
 dropout_rate = 0.6
 data_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\data\\ready\\"
-log_path = 'C:\\logs\\retrain_5_2_5'
-save_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\models\\retrain_5_2_5"
+log_path = 'C:\\logs\\retrain_5_2_6'
+save_dir = "C:\\Users\\Administrator\\Documents\\Mynotebooks\\models\\retrain_5_2_6"
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 model_callback = os.path.join(save_dir, "hyper_trained_model_callback.h5")
@@ -49,7 +49,7 @@ print(tr_y.shape)
 tr_X /= 255
 te_X /= 255
 
-model = load_model("../models/v5_2_5/hyper_trained_model_callback.h5")
+model = load_model("../models/v5_2_6/hyper_trained_model_callback.h5")
 
 # initiate RMSprop optimizer
 # opt = keras.optimizers.rmsprop(lr=0.001, decay=1e-6)
@@ -66,22 +66,22 @@ callbacks = [
 
                 EarlyStopping(
                   monitor='loss', 
-                  mode='max',
-                  patience=100,
+                  mode='auto',
+                  patience=30,
                   verbose=1),
 
                 #TerminateOnNaN(),
 
                 ReduceLROnPlateau(
                     monitor='loss', 
-                    factor=0.2,
+                    factor=0.33,
                     patience=3,
                     min_lr=1e-12),
                 
                 ModelCheckpoint(model_callback,
                   monitor='val_acc',
                   save_best_only=True,
-                  mode='max',
+                  mode='auto',
                   verbose=0)
             ]
 
